@@ -1,11 +1,16 @@
 {
-  "name": "@modelcontextprotocol/server-filesystem",
-  "version": "0.6.3",
-  "description": "MCP server for filesystem access",
+  "name": "mcp-server-filesystem-ssoj13",
+  "version": "0.6.4",
+  "description": "MCP server for filesystem access (forked with schema fixes)",
   "license": "MIT",
-  "author": "Anthropic, PBC (https://anthropic.com)",
-  "homepage": "https://modelcontextprotocol.io",
-  "bugs": "https://github.com/modelcontextprotocol/servers/issues",
+  "author": "ssoj13 (based on original by Anthropic, PBC)",
+  "homepage": "https://github.com/ssoj13/servers",
+  "bugs": "https://github.com/ssoj13/servers/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ssoj13/servers.git",
+    "directory": "src/filesystem"
+  },
   "type": "module",
   "bin": {
     "mcp-server-filesystem": "dist/index.js"
