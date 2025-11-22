@@ -1,4 +1,13 @@
-# Filesystem MCP Server
+# Filesystem MCP Server (Fork)
+
+> **This is a fork of [@modelcontextprotocol/server-filesystem](https://github.com/modelcontextprotocol/servers) with MCP schema fixes.**
+>
+> **Changes from original:**
+> - Fixed tool schema definitions to ensure proper JSON Schema generation
+> - Resolved "missing field `type`" errors in MCP clients
+> - All tools now use correct inputSchema/outputSchema format
+>
+> Original project by [Anthropic, PBC](https://anthropic.com) - Licensed under MIT
 
 Node.js server implementing Model Context Protocol (MCP) for filesystem operations.
 
