@@ -1,13 +1,17 @@
-import pytest
-from pathlib import Path
-import git
-from mcp_server_git.server import git_checkout, git_branch, git_add, git_status
+import os
+import stat
 import shutil
+from pathlib import Path
+
+import git
+import pytest
+
+from mcp_server_git.server import git_add, git_branch, git_checkout, git_status
 
 @pytest.fixture
 def test_repository(tmp_path: Path):
     repo_path = tmp_path / "temp_test_repo"
-    test_repo = git.Repo.init(repo_path)
+    test_repo = git.Repo.init(repo_path, initial_branch="master")
 
     Path(repo_path / "test.txt").write_text("test")
     test_repo.index.add(["test.txt"])
@@ -15,7 +19,13 @@ def test_repository(tmp_path: Path):
 
     yield test_repo
 
-    shutil.rmtree(repo_path)
+    test_repo.close()
+
+    def _on_rm_error(func, path, exc_info):
+        os.chmod(path, stat.S_IWRITE)
+        func(path)
+
+    shutil.rmtree(repo_path, onerror=_on_rm_error)
 
 def test_git_checkout_existing_branch(test_repository):
     test_repository.git.branch("test-branch")
@@ -46,24 +56,26 @@ def test_git_branch_all(test_repository):
     assert "new-branch-all" in result
 
 def test_git_branch_contains(test_repository):
+    default_branch = test_repository.active_branch.name
     # Create a new branch and commit to it
     test_repository.git.checkout("-b", "feature-branch")
     Path(test_repository.working_dir / Path("feature.txt")).write_text("feature content")
     test_repository.index.add(["feature.txt"])
     commit = test_repository.index.commit("feature commit")
-    test_repository.git.checkout("master")
+    test_repository.git.checkout(default_branch)
 
     result = git_branch(test_repository, "local", contains=commit.hexsha)
     assert "feature-branch" in result
     assert "master" not in result
 
 def test_git_branch_not_contains(test_repository):
+    default_branch = test_repository.active_branch.name
     # Create a new branch and commit to it
     test_repository.git.checkout("-b", "another-feature-branch")
     Path(test_repository.working_dir / Path("another_feature.txt")).write_text("another feature content")
     test_repository.index.add(["another_feature.txt"])
     commit = test_repository.index.commit("another feature commit")
-    test_repository.git.checkout("master")
+    test_repository.git.checkout(default_branch)
 
     result = git_branch(test_repository, "local", not_contains=commit.hexsha)
     assert "another-feature-branch" not in result

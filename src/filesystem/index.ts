@@ -582,7 +582,7 @@ server.registerTool(
     const contentBlock = { type: "text" as const, text };
     return {
       content: [contentBlock],
-      structuredContent: { content: [contentBlock] }
+      structuredContent: { content: text }
     };
   }
 );
