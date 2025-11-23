@@ -1,6 +1,6 @@
 {
   "name": "mcp-server-filesystem-ssoj13",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "MCP server for filesystem access (forked with schema fixes)",
   "license": "MIT",
   "author": "ssoj13 (based on original by Anthropic, PBC)",
